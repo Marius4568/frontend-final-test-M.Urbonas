@@ -1,0 +1,19 @@
+@mixin button($bgColor, $fontColor) {
+  background-color: $bgColor;
+  color: $fontColor;
+  padding: 0.8rem 1.3rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.5s;
+
+  &:hover {
+    transition: background-color 0.5s;
+
+    @if (lightness($bgColor) > 60) {
+      background-color: darken($bgColor, 6%);
+    } @else {
+      background-color: lighten($bgColor, 3%);
+    }
+  }
+}

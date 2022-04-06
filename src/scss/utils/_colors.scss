@@ -1,0 +1,12 @@
+$white: hsl(0, 0%, 100%);
+$black: hsl(0, 0%, 0%);
+$light-gray: hsl(0, 0%, 91%);
+$dark-gray: hsl(0, 0%, 47%);
+$light-blue: hsl(234, 65%, 55%);
+$dark-blue: hsl(234, 53%, 28%);
+
+//call to action section gradient
+@mixin ctasBgGradient {
+  background: rgb(66, 81, 215);
+  background: linear-gradient(180deg, $light-blue 0%, $dark-blue 100%);
+}

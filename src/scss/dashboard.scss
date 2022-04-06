@@ -1,0 +1,118 @@
+@use "./utils" as *;
+@use "./components/buttons" as *;
+@use "./general" as *;
+
+body {
+  background-color: $light-gray;
+  padding-bottom: 3rem;
+}
+
+.data-cards-section {
+  margin-top: 2rem;
+  max-width: toRem(1600);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.card {
+  background-color: $white;
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  border-radius: 1rem;
+
+  .card-icon {
+    font-size: 1.4rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    color: $light-blue;
+    box-shadow: rgba(100, 100, 111, 0.3) 0px 0px 10px;
+    display: grid;
+    place-items: center;
+  }
+
+  .card-info {
+    width: 60%;
+  }
+}
+
+.people-search-section {
+  padding: 2rem;
+  background-color: $white;
+  margin: 4rem auto 0;
+  width: 70%;
+  border-radius: 1rem;
+
+  .people-search-section__sides-wrap {
+    padding: 0 1rem;
+    display: flex;
+
+    .people-search-section__left-side {
+      width: 70%;
+
+      input {
+        width: 98%;
+      }
+    }
+
+    .people-search-section__right-side {
+      width: 30%;
+
+      select {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.people-info-fields {
+}
+
+.person-field {
+  padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: $light-gray 1px solid;
+}
+
+.initialsContactInfo {
+  width: 70%;
+  display: flex;
+  align-items: center;
+
+  .initials {
+    text-transform: uppercase;
+    margin-left: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: $light-blue;
+    box-shadow: rgba(100, 100, 111, 0.3) 0px 0px 10px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    margin-right: 2rem;
+  }
+  .contact-info {
+    justify-self: flex-start;
+
+    p {
+      margin: 0 0 0.2rem 0;
+    }
+
+    span {
+      font-size: 0.7rem;
+      color: $dark-gray;
+    }
+  }
+}
+
+.country {
+  width: 30%;
+  text-align: left;
+}

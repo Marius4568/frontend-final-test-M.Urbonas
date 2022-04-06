@@ -1,0 +1,1 @@
+{"mappings":"ACAA","sources":["dashboard.2443a00e.css","src/scss/dashboard.scss"],"sourcesContent":["body {\n  background-color: #00f;\n}\n\n/*# sourceMappingURL=dashboard.2443a00e.css.map */\n","body {\r\n  background-color: blue;\r\n}\r\n"],"names":[],"version":3,"file":"dashboard.2443a00e.css.map"}

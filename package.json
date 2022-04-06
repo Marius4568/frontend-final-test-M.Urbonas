@@ -1,0 +1,23 @@
+{
+  "name": "frontend-final-test-mu",
+  "version": "1.0.0",
+  "description": "",
+  "browserslist": [
+    "since 2017-06"
+  ],
+  "scripts": {
+    "dev": "parcel ./src/index.html",
+    "devDboard": "parcel ./src/dashboard.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.49.11"
+  },
+  "dependencies": {
+    "gsap": "^3.10.2",
+    "parcel-bundler": "^1.3.1"
+  }
+}

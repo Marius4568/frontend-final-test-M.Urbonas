@@ -1,0 +1,93 @@
+@use "./utils" as *;
+@use "./components/buttons" as *;
+@use "./general" as *;
+
+body {
+  font-size: toRem(12);
+  padding-bottom: 5rem;
+}
+
+main {
+  max-width: toRem(1600);
+  display: flex;
+  flex-direction: column;
+}
+
+.call-to-action-section {
+  position: relative;
+  min-height: 30rem;
+  height: 60vh;
+  width: 100%;
+  @include ctasBgGradient;
+  display: grid;
+  place-items: center;
+  color: $white;
+
+  .call-to-action-section__info {
+    padding: 0 3rem;
+    text-align: center;
+    max-width: 40rem;
+
+    p {
+      margin-top: 2rem;
+      line-height: 1.7;
+    }
+
+    button {
+      margin-top: 2rem;
+      @include button($light-blue, $white);
+    }
+  }
+}
+
+.logo {
+  font-size: 1.3rem;
+  letter-spacing: 0.1rem;
+  font-weight: bold;
+  font-family: "Raleway", sans-serif;
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+}
+
+.form-section {
+  .form-section__info {
+    width: 100%;
+    margin-top: 4rem;
+
+    form {
+      padding: 3rem 3rem;
+      max-width: 40rem;
+      margin: 0 auto;
+      height: 10rem;
+      border: 1px solid black;
+      position: relative;
+
+      button[type="submit"] {
+        @include button($light-blue, $white);
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+
+      .form-elements-wrap {
+        height: 100%;
+
+        fieldset {
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 400px) {
+  body {
+    font-size: toRem(14);
+  }
+}
+
+@media screen and (min-width: 700px) {
+  body {
+    font-size: toRem(16);
+  }
+}

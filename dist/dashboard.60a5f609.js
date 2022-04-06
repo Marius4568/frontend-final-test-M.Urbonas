@@ -123,7 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.asyncFunctions = void 0;
+exports.dashboardAsyncFunctions = exports.asyncFunctions = void 0;
 const asyncFunctions = {
   getData: async function getData(url) {
     try {
@@ -170,97 +170,91 @@ const asyncFunctions = {
   }
 };
 exports.asyncFunctions = asyncFunctions;
-},{}],"js/formStepsHtml.js":[function(require,module,exports) {
-"use strict";
+const dashboardAsyncFunctions = {
+  getAllPeopleFromDB: async function getAllPeopleFromDB() {
+    try {
+      const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&populate=*");
+      let array = [];
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.fillSelectCountryElem = fillSelectCountryElem;
-exports.getSteps = getSteps;
+      for (let page = 1; array.length < data.meta.pagination.total; page++) {
+        const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&pagination[page]=".concat(page, "&populate=*"));
+        data.data.forEach(el => array.push(el));
+      }
 
-var _asyncFunctions = require("./asyncFunctions");
+      return array;
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  updateUncapitalizedNames: async function updateUncapitalizedNames() {
+    let array = await dashboardAsyncFunctions.getAllPeopleFromDB();
+    array = array.map(el => [el.attributes.first_name, el.attributes.last_name]);
+    array = array.filter(el => el[0][0] !== el[0][0].toUpperCase() || el[1][0] !== el[1][0].toUpperCase());
+    document.querySelector(".not-capitalized-names").textContent = array.length;
+  },
+  updateSignupCountries: async function updateSignupCountries() {
+    let array = await dashboardAsyncFunctions.getAllPeopleFromDB();
+    let uniqueCountries = [];
+    array.forEach(el => {
+      const shortcut = el.attributes.country.data;
 
-let step1 = "";
-let step2 = "";
-let step3 = "";
-const step4 = "<fieldset>\n<p>Please check your email</p>\n<span\n  >We sent you an email with all of the required information to complete\n  the registration.</span\n>\n</fieldset>";
-
-async function getSteps() {
-  let countryOptions = "";
-  let countrySelect = "";
-  let activityCheckboxes = "";
-  let steps = "";
-
-  try {
-    //Getting activities and handling their errors
-    const activities = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/activities");
-
-    if (activities.error) {
-      step1 = "Error ".concat(activities.error.status, ": ").concat(activities.error.message);
-    } else if (activities.data.length < 1) {
-      step1 = "Empty array, no data found.";
-    } else {
-      activities.data.forEach(el => {
-        activityCheckboxes += "<input\n      type=\"checkbox\"\n      name=\"afterwork-activity\"\n      value=\"".concat(el.attributes.title, "\"\n      data-id=\"").concat(el.id, "\"\n    /><label for=\"").concat(el.id, "\">").concat(el.attributes.title, "</label>\n    <br />");
-      });
-      step1 = "<fieldset>\n<p>What do you usually do After Work?</p>\n".concat(activityCheckboxes, "\n</fieldset>");
-    } //Getting countries and handling their errors
-
-
-    const countries = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
+      if (shortcut) {
+        if (!uniqueCountries.includes(shortcut.attributes.country)) {
+          uniqueCountries.push(shortcut.attributes.country);
+        }
+      }
+    });
+    document.querySelector(".signup-countries").textContent = uniqueCountries.length;
+  },
+  updateTotalSignups: async function updateTotalSignups() {
+    try {
+      let signups = document.querySelector(".signups");
+      const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=country");
+      signups.textContent = data.meta.pagination.total;
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  fillSelectCountryElem: async function fillSelectCountryElem(selectElem) {
+    let options = "";
+    const countries = await asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
 
     if (countries.error) {
-      step2 = "Error ".concat(countries.error.status, ": ").concat(countries.error.message);
+      alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
     } else if (countries.data.length < 1) {
-      step2 = "Empty array, no data found.";
+      alert("Empty array, no country data found.");
     } else {
       countries.data.forEach(el => {
-        countryOptions += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
+        options += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
       });
-      countrySelect = "<select id=\"country\" name=\"country\">\n    <option selected disabled hidden value=\"1\">Your Country:</option>\n    ".concat(countryOptions, "\n    </select>");
-      step2 = "<fieldset>\n<p>Please fill in your details:</p>\n<input type=\"text\" name=\"\" id=\"name\" placeholder=\"First Name\" required/><br />\n<input type=\"text\" name=\"\" id=\"lastName\" placeholder=\"Last Name\" required/><br />\n<input type=\"email\" name=\"\" id=\"email\" placeholder=\"Your Email\" required/><br />\n".concat(countrySelect, "<br />\n<input type=\"checkbox\" name=\"\" id=\"T&C\" required/><span\n  >Please accept our <a href=\"#\">terms and conditions</a></span\n>\n</fieldset>");
     }
 
-    return steps = [step1, step2, step3, step4];
-  } catch (err) {
-    return steps = [step1, step2, step3, step4];
+    selectElem.innerHTML = '<option data-id ="" value="All countries">All countries</option>' + options;
   }
-}
-
-async function fillSelectCountryElem(selectElem) {
-  let options = "";
-  const countries = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
-
-  if (countries.error) {
-    alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
-  } else if (countries.data.length < 1) {
-    alert("Empty array, no country data found.");
-  } else {
-    countries.data.forEach(el => {
-      options += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
-    });
-  }
-
-  selectElem.innerHTML = '<option data-id ="" value="All countries">All countries</option>' + options;
-}
-},{"./asyncFunctions":"js/asyncFunctions.js"}],"js/dashboard.js":[function(require,module,exports) {
+};
+exports.dashboardAsyncFunctions = dashboardAsyncFunctions;
+},{}],"js/dashboard.js":[function(require,module,exports) {
 "use strict";
 
 var _asyncFunctions = require("./asyncFunctions");
-
-var _formStepsHtml = require("./formStepsHtml");
 
 const searchField = document.querySelector("input[type='search']");
 const countrySelect = document.querySelector(".country-select");
 const peopleInfo = document.querySelector(".people-info-fields"); //fill the countrySelect element with options
 
-(0, _formStepsHtml.fillSelectCountryElem)(countrySelect); //fill the visitors card by a random number between 5000 and 10000
+_asyncFunctions.dashboardAsyncFunctions.fillSelectCountryElem(countrySelect); //fill the visitors card by a random number between 5000 and 10000
+
 
 document.querySelector(".visitors").textContent = Math.floor(Math.random() * (10000 - 5000 + 1) + 5000); //fill the total signups field
 
-let signups = document.querySelector(".signups");
-fetch("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=country").then(res => res.json()).then(data => signups.textContent = data.meta.pagination.total).catch(err => alert(err.message)); //Add event listeners to the search and select fields
+_asyncFunctions.dashboardAsyncFunctions.updateTotalSignups(); //fill the signup countries field
+
+
+_asyncFunctions.dashboardAsyncFunctions.updateSignupCountries(); //fill the uncapitalized names field
+
+
+_asyncFunctions.dashboardAsyncFunctions.updateUncapitalizedNames(); //Add event listener to the search field
+
 
 searchField.addEventListener("keyup", ev => {
   if (ev.target.value.length > 0) {
@@ -272,12 +266,13 @@ searchField.addEventListener("keyup", ev => {
   }
 
   ev.currentTarget.value;
-});
+}); //Add event listener to the country select field
+
 countrySelect.addEventListener("change", ev => {
   const searchVals = collectPeopleSearchInputs();
   const query = buildPeopleSearchQuery(searchVals[0], searchVals[1]);
   displayPeople(query);
-});
+}); //Function to display people on the page
 
 async function displayPeople(url) {
   try {
@@ -289,10 +284,8 @@ async function displayPeople(url) {
   } catch (err) {
     alert(err.message);
   }
-} //initialize people info list
+} //Functions that help to get search inputs and formulate search query/////////////////////////
 
-
-displayPeople("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=*");
 
 function buildPeopleSearchQuery(searchVal, countryID) {
   let query = "http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=*";
@@ -310,50 +303,13 @@ function buildPeopleSearchQuery(searchVal, countryID) {
 
 function collectPeopleSearchInputs() {
   return [searchField.value, countrySelect.options[countrySelect.selectedIndex].dataset.id];
-}
+} /////////////////////////////////////////////////////////////////////////////////////////////
+//initialize people info list
 
-async function getAllPeopleFromDB() {
-  try {
-    const data = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&populate=*");
-    let array = [];
 
-    for (let page = 1; array.length < data.meta.pagination.total; page++) {
-      const data = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&pagination[page]=".concat(page, "&populate=*"));
-      data.data.forEach(el => array.push(el));
-    }
-
-    return array;
-  } catch (err) {
-    alert(err.message);
-  }
-}
-
-async function updateUncapitalizedNames() {
-  let array = await getAllPeopleFromDB();
-  array = array.map(el => [el.attributes.first_name, el.attributes.last_name]);
-  array = array.filter(el => el[0][0] !== el[0][0].toUpperCase() || el[1][0] !== el[1][0].toUpperCase());
-  document.querySelector(".not-capitalized-names").textContent = array.length;
-}
-
-async function updateSignupCountries() {
-  let array = await getAllPeopleFromDB();
-  let uniqueCountries = [];
-  array.forEach(el => {
-    const shortcut = el.attributes.country.data;
-
-    if (shortcut) {
-      if (!uniqueCountries.includes(shortcut.attributes.country)) {
-        uniqueCountries.push(shortcut.attributes.country);
-      }
-    }
-  });
-  document.querySelector(".signup-countries").textContent = uniqueCountries.length;
-}
-
-updateSignupCountries();
-updateUncapitalizedNames(); //sample search for a specific country with the name containing something or the surname containing something
+displayPeople("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=*"); //sample search for a specific country with the name containing something or the surname containing something
 //http://18.193.250.181:1337/api/people?populate=*&filters[country][id][$eq]=7&filters[$or][0][first_name][$containsi]=ll&filters[$or][1][last_name][$containsi]=o
-},{"./asyncFunctions":"js/asyncFunctions.js","./formStepsHtml":"js/formStepsHtml.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./asyncFunctions":"js/asyncFunctions.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -381,7 +337,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59006" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52434" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

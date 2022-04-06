@@ -4,16 +4,20 @@ import { getSteps } from "./formStepsHtml";
 
 let formSteps = "";
 
-getSteps().then((data) => {
-  formSteps = data;
-  updateForm();
-});
+getSteps()
+  .then((data) => {
+    formSteps = data;
+    updateForm();
+  })
+  .catch((err) => alert(err.message + " couldn't load steps"));
 
 const form = document.forms[0];
 let currentStep = 0;
 const questionCount = document.querySelector(".question-count");
+//we're going to change what's inside this container
 const formElemWrap = document.querySelector(".form-elements-wrap");
 
+//everytime we click the next button the form updates
 form.addEventListener("submit", (ev) => {
   ev.preventDefault();
   updateForm();
@@ -32,7 +36,7 @@ function updateForm() {
       currentStep++;
     }
   }
-
+  //depending on the form step we tell the form what to do
   switch (currentStep + 1) {
     case 1:
       localStorageFunctions.removeLocalStorageCheckboxes();
@@ -63,7 +67,7 @@ function updateForm() {
           personID = data.data.id;
           fetchPersonData(data.data.id);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => alert(err));
 
       btn.addEventListener("click", (ev) => {
         localStorageFunctions.removeLocalStorageCheckboxes();
@@ -76,7 +80,6 @@ function updateForm() {
       form.append(btn);
       questionCount.textContent = `${currentStep + 1}/5`;
       currentStep++;
-      // update();
 
       break;
     case 4:
@@ -89,7 +92,7 @@ function updateForm() {
     default:
   }
 }
-
+//for the third step in the form we get the person's data which we have just submitted
 async function fetchPersonData(id) {
   let step3 = ``;
   const personData = await asyncFunctions.getData(
@@ -102,7 +105,6 @@ async function fetchPersonData(id) {
     step3 = `Empty array, no data found.`;
   } else {
     const person = personData.data[0].attributes;
-    console.log(person);
 
     step3 = `<fieldset>
 <p>Are these details correct?</p>

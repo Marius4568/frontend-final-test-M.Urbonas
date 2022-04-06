@@ -123,7 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.asyncFunctions = void 0;
+exports.dashboardAsyncFunctions = exports.asyncFunctions = void 0;
 const asyncFunctions = {
   getData: async function getData(url) {
     try {
@@ -170,6 +170,69 @@ const asyncFunctions = {
   }
 };
 exports.asyncFunctions = asyncFunctions;
+const dashboardAsyncFunctions = {
+  getAllPeopleFromDB: async function getAllPeopleFromDB() {
+    try {
+      const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&populate=*");
+      let array = [];
+
+      for (let page = 1; array.length < data.meta.pagination.total; page++) {
+        const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=100&pagination[page]=".concat(page, "&populate=*"));
+        data.data.forEach(el => array.push(el));
+      }
+
+      return array;
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  updateUncapitalizedNames: async function updateUncapitalizedNames() {
+    let array = await dashboardAsyncFunctions.getAllPeopleFromDB();
+    array = array.map(el => [el.attributes.first_name, el.attributes.last_name]);
+    array = array.filter(el => el[0][0] !== el[0][0].toUpperCase() || el[1][0] !== el[1][0].toUpperCase());
+    document.querySelector(".not-capitalized-names").textContent = array.length;
+  },
+  updateSignupCountries: async function updateSignupCountries() {
+    let array = await dashboardAsyncFunctions.getAllPeopleFromDB();
+    let uniqueCountries = [];
+    array.forEach(el => {
+      const shortcut = el.attributes.country.data;
+
+      if (shortcut) {
+        if (!uniqueCountries.includes(shortcut.attributes.country)) {
+          uniqueCountries.push(shortcut.attributes.country);
+        }
+      }
+    });
+    document.querySelector(".signup-countries").textContent = uniqueCountries.length;
+  },
+  updateTotalSignups: async function updateTotalSignups() {
+    try {
+      let signups = document.querySelector(".signups");
+      const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=country");
+      signups.textContent = data.meta.pagination.total;
+    } catch (err) {
+      alert(err.message);
+    }
+  },
+  fillSelectCountryElem: async function fillSelectCountryElem(selectElem) {
+    let options = "";
+    const countries = await asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
+
+    if (countries.error) {
+      alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
+    } else if (countries.data.length < 1) {
+      alert("Empty array, no country data found.");
+    } else {
+      countries.data.forEach(el => {
+        options += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
+      });
+    }
+
+    selectElem.innerHTML = '<option data-id ="" value="All countries">All countries</option>' + options;
+  }
+};
+exports.dashboardAsyncFunctions = dashboardAsyncFunctions;
 },{}],"js/localStorageFunctions.js":[function(require,module,exports) {
 "use strict";
 
@@ -203,21 +266,21 @@ exports.localStorageFunctions = localStorageFunctions;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fillSelectCountryElem = fillSelectCountryElem;
 exports.getSteps = getSteps;
 
 var _asyncFunctions = require("./asyncFunctions");
 
 let step1 = "";
 let step2 = "";
-let step3 = "";
+let step3 = ""; //initialize, to later return with all step values
+
+let steps = "";
 const step4 = "<fieldset>\n<p>Please check your email</p>\n<span\n  >We sent you an email with all of the required information to complete\n  the registration.</span\n>\n</fieldset>";
 
 async function getSteps() {
   let countryOptions = "";
   let countrySelect = "";
   let activityCheckboxes = "";
-  let steps = "";
 
   try {
     //Getting activities and handling their errors
@@ -228,6 +291,7 @@ async function getSteps() {
     } else if (activities.data.length < 1) {
       step1 = "Empty array, no data found.";
     } else {
+      //build up step 1 in the form
       activities.data.forEach(el => {
         activityCheckboxes += "<input\n      type=\"checkbox\"\n      name=\"afterwork-activity\"\n      value=\"".concat(el.attributes.title, "\"\n      data-id=\"").concat(el.id, "\"\n    /><label for=\"").concat(el.id, "\">").concat(el.attributes.title, "</label>\n    <br />");
       });
@@ -244,7 +308,8 @@ async function getSteps() {
     } else {
       countries.data.forEach(el => {
         countryOptions += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
-      });
+      }); //build up step 2 in the form
+
       countrySelect = "<select id=\"country\" name=\"country\">\n    <option selected disabled hidden value=\"1\">Your Country:</option>\n    ".concat(countryOptions, "\n    </select>");
       step2 = "<fieldset>\n<p>Please fill in your details:</p>\n<input type=\"text\" name=\"\" id=\"name\" placeholder=\"First Name\" required/><br />\n<input type=\"text\" name=\"\" id=\"lastName\" placeholder=\"Last Name\" required/><br />\n<input type=\"email\" name=\"\" id=\"email\" placeholder=\"Your Email\" required/><br />\n".concat(countrySelect, "<br />\n<input type=\"checkbox\" name=\"\" id=\"T&C\" required/><span\n  >Please accept our <a href=\"#\">terms and conditions</a></span\n>\n</fieldset>");
     }
@@ -253,23 +318,6 @@ async function getSteps() {
   } catch (err) {
     return steps = [step1, step2, step3, step4];
   }
-}
-
-async function fillSelectCountryElem(selectElem) {
-  let options = "";
-  const countries = await _asyncFunctions.asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
-
-  if (countries.error) {
-    alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
-  } else if (countries.data.length < 1) {
-    alert("Empty array, no country data found.");
-  } else {
-    countries.data.forEach(el => {
-      options += "<option data-id =".concat(el.id, " value=").concat(el.attributes.country, ">").concat(el.attributes.country, "</option>");
-    });
-  }
-
-  selectElem.innerHTML = '<option data-id ="" value="All countries">All countries</option>' + options;
 }
 },{"./asyncFunctions":"js/asyncFunctions.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
@@ -284,11 +332,13 @@ let formSteps = "";
 (0, _formStepsHtml.getSteps)().then(data => {
   formSteps = data;
   updateForm();
-});
+}).catch(err => alert(err.message + " couldn't load steps"));
 const form = document.forms[0];
 let currentStep = 0;
-const questionCount = document.querySelector(".question-count");
-const formElemWrap = document.querySelector(".form-elements-wrap");
+const questionCount = document.querySelector(".question-count"); //we're going to change what's inside this container
+
+const formElemWrap = document.querySelector(".form-elements-wrap"); //everytime we click the next button the form updates
+
 form.addEventListener("submit", ev => {
   ev.preventDefault();
   updateForm();
@@ -304,7 +354,8 @@ function updateForm() {
     } else {
       currentStep++;
     }
-  }
+  } //depending on the form step we tell the form what to do
+
 
   switch (currentStep + 1) {
     case 1:
@@ -336,7 +387,7 @@ function updateForm() {
       _asyncFunctions.asyncFunctions.postPersonData("http://18.193.250.181:1337/api/people", dataToPost).then(data => {
         personID = data.data.id;
         fetchPersonData(data.data.id);
-      }).catch(err => console.log(err));
+      }).catch(err => alert(err));
 
       btn.addEventListener("click", ev => {
         _localStorageFunctions.localStorageFunctions.removeLocalStorageCheckboxes();
@@ -350,8 +401,7 @@ function updateForm() {
       });
       form.append(btn);
       questionCount.textContent = "".concat(currentStep + 1, "/5");
-      currentStep++; // update();
-
+      currentStep++;
       break;
 
     case 4:
@@ -365,7 +415,8 @@ function updateForm() {
 
     default:
   }
-}
+} //for the third step in the form we get the person's data which we have just submitted
+
 
 async function fetchPersonData(id) {
   let step3 = "";
@@ -377,7 +428,6 @@ async function fetchPersonData(id) {
     step3 = "Empty array, no data found.";
   } else {
     const person = personData.data[0].attributes;
-    console.log(person);
     step3 = "<fieldset>\n<p>Are these details correct?</p>\n<span>Please make sure these details are correct:</span>\n<table>\n  <tr>\n    <td>Name</td>\n    <td>".concat(person.first_name, "</td>\n  </tr>\n  <tr>\n    <td>Last Name</td>\n    <td>").concat(person.last_name, "</td>\n  </tr>\n  <tr>\n    <td>email</td>\n    <td>").concat(person.email, "</td>\n  </tr>\n</table>\n</fieldset>");
   }
 
@@ -411,7 +461,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59783" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60312" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

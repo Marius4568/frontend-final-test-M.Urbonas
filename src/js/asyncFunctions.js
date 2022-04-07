@@ -12,7 +12,6 @@ export const asyncFunctions = {
 
   postPersonData: async function (url, dataObject) {
     try {
-      console.log(JSON.stringify(dataObject));
       const response = await fetch(url, {
         method: "POST",
         headers: {

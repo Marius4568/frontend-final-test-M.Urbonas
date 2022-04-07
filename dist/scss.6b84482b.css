@@ -18,6 +18,11 @@ main {
   flex-direction: column;
 }
 
+input,
+select {
+  margin-bottom: 0.5rem;
+}
+
 .call-to-action-section {
   position: relative;
   min-height: 30rem;
@@ -125,7 +130,6 @@ main {
   background-color: #d9d9d9;
 }
 .form-section .form-section__info form .form-elements-wrap {
-  height: 100%;
   width: 100%;
 }
 .form-section .form-section__info form .form-elements-wrap fieldset {

@@ -1,7 +1,6 @@
 import { asyncFunctions } from "./asyncFunctions";
 import { localStorageFunctions } from "./localStorageFunctions";
 import { getSteps } from "./formStepsHtml";
-import gsap from "gsap";
 import { progressBarChange } from "./gsapAnimations";
 
 let formSteps = "";
@@ -72,7 +71,7 @@ function updateForm() {
           personID = data.data.id;
           fetchPersonData(data.data.id);
         })
-        .catch((err) => alert(err));
+        .catch((err) => console.log(err));
 
       btn.addEventListener("click", (ev) => {
         localStorageFunctions.removeLocalStorageCheckboxes();

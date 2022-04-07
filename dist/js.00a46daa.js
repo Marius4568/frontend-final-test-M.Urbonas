@@ -136,7 +136,6 @@ const asyncFunctions = {
   },
   postPersonData: async function postPersonData(url, dataObject) {
     try {
-      console.log(JSON.stringify(dataObject));
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -183,7 +182,7 @@ const dashboardAsyncFunctions = {
 
       return array;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
   updateUncapitalizedNames: async function updateUncapitalizedNames() {
@@ -212,7 +211,7 @@ const dashboardAsyncFunctions = {
       const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=country");
       signups.textContent = data.meta.pagination.total;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
   fillSelectCountryElem: async function fillSelectCountryElem(selectElem) {
@@ -220,7 +219,7 @@ const dashboardAsyncFunctions = {
     const countries = await asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
 
     if (countries.error) {
-      alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
+      console.log("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
     } else if (countries.data.length < 1) {
       alert("Empty array, no country data found.");
     } else {
@@ -6096,11 +6095,7 @@ var _localStorageFunctions = require("./localStorageFunctions");
 
 var _formStepsHtml = require("./formStepsHtml");
 
-var _gsap = _interopRequireDefault(require("gsap"));
-
 var _gsapAnimations = require("./gsapAnimations");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 let formSteps = "";
 (0, _formStepsHtml.getSteps)().then(data => {
@@ -6164,7 +6159,7 @@ function updateForm() {
       _asyncFunctions.asyncFunctions.postPersonData("http://18.193.250.181:1337/api/people", dataToPost).then(data => {
         personID = data.data.id;
         fetchPersonData(data.data.id);
-      }).catch(err => alert(err));
+      }).catch(err => console.log(err));
 
       btn.addEventListener("click", ev => {
         _localStorageFunctions.localStorageFunctions.removeLocalStorageCheckboxes();
@@ -6210,7 +6205,7 @@ async function fetchPersonData(id) {
 
   formElemWrap.innerHTML = step3;
 }
-},{"./asyncFunctions":"js/asyncFunctions.js","./localStorageFunctions":"js/localStorageFunctions.js","./formStepsHtml":"js/formStepsHtml.js","gsap":"../node_modules/gsap/index.js","./gsapAnimations":"js/gsapAnimations.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./asyncFunctions":"js/asyncFunctions.js","./localStorageFunctions":"js/localStorageFunctions.js","./formStepsHtml":"js/formStepsHtml.js","./gsapAnimations":"js/gsapAnimations.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6238,7 +6233,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65520" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50498" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

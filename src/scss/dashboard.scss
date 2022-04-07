@@ -5,11 +5,12 @@
 body {
   background-color: $light-gray;
   padding-bottom: 3rem;
+  max-width: toRem(1600);
+  margin: 0 auto;
 }
 
 .data-cards-section {
   margin-top: 2rem;
-  max-width: toRem(1600);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -20,14 +21,16 @@ body {
   background-color: $white;
   width: 70%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   padding: 2rem;
   border-radius: 1rem;
 
   .card-icon {
-    font-size: 1.4rem;
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 20%;
+    font-size: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
     padding: 0.5rem;
     border-radius: 50%;
     color: $light-blue;
@@ -38,6 +41,16 @@ body {
 
   .card-info {
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    p {
+      font-weight: bold;
+      margin-right: 1rem;
+    }
   }
 }
 
@@ -51,17 +64,20 @@ body {
   .people-search-section__sides-wrap {
     padding: 0 1rem;
     display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .people-search-section__left-side {
-      width: 70%;
+      width: 100%;
+      margin-bottom: 1rem;
 
       input {
-        width: 98%;
+        width: 100%;
       }
     }
 
     .people-search-section__right-side {
-      width: 30%;
+      width: 100%;
 
       select {
         width: 100%;
@@ -70,25 +86,26 @@ body {
   }
 }
 
-.people-info-fields {
-}
-
 .person-field {
   padding: 2rem 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 1.5rem;
   justify-content: space-between;
   border-bottom: $light-gray 1px solid;
 }
 
 .initialsContactInfo {
+  gap: 1.5rem;
   width: 70%;
   display: flex;
+  flex-direction: column;
   align-items: center;
 
   .initials {
     text-transform: uppercase;
-    margin-left: 2rem;
+
     width: 2.5rem;
     height: 2.5rem;
     color: $light-blue;
@@ -96,11 +113,9 @@ body {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    margin-right: 2rem;
   }
   .contact-info {
-    justify-self: flex-start;
-
+    text-align: center;
     p {
       margin: 0 0 0.2rem 0;
     }
@@ -114,5 +129,72 @@ body {
 
 .country {
   width: 30%;
-  text-align: left;
+  text-align: center;
+}
+
+@media only screen and (min-width: 600px) {
+  .card {
+    justify-content: space-between;
+
+    .card-icon {
+      width: 15%;
+      font-size: 1.4rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+    }
+
+    .card-info {
+      width: 85%;
+    }
+  }
+
+  .people-search-section {
+    .people-search-section__sides-wrap {
+      flex-direction: row;
+      align-items: flex-start;
+
+      .people-search-section__left-side {
+        width: 70%;
+
+        input {
+          width: 98%;
+        }
+      }
+
+      .people-search-section__right-side {
+        width: 30%;
+      }
+    }
+  }
+
+  .person-field {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+  }
+
+  .initialsContactInfo {
+    gap: 0;
+    flex-direction: row;
+
+    .initials {
+      margin-left: 2rem;
+      margin-right: 2rem;
+    }
+    .contact-info {
+      text-align: left;
+    }
+  }
+
+  .country {
+    text-align: left;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .card {
+    width: 30%;
+  }
 }

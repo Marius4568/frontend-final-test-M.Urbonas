@@ -82,7 +82,7 @@ function updateForm() {
         update();
         document.querySelector("button[type='submit']").textContent = "Next";
       });
-      btnWrap.append(btn);
+      btnWrap.prepend(btn);
       questionCount.textContent = `${currentStep + 1}/5`;
       currentStep++;
 

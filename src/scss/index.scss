@@ -5,10 +5,11 @@
 body {
   font-size: toRem(12);
   padding-bottom: 5rem;
+  max-width: toRem(1600);
+  margin: auto;
 }
 
 main {
-  max-width: toRem(1600);
   display: flex;
   flex-direction: column;
 }
@@ -51,6 +52,8 @@ main {
 }
 
 .form-section {
+  background-color: $white;
+  min-height: 30rem;
   .form-section__info {
     width: 100%;
     margin-top: 4rem;
@@ -79,20 +82,17 @@ main {
 
       .btn-wrap {
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         align-items: center;
         justify-content: center;
 
         button[type="submit"] {
           @include button($light-blue, $white);
-          position: absolute;
-          bottom: 6.5rem;
+          margin: 2rem 0;
         }
 
         .oops-btn {
           @include button($light-gray, $dark-gray);
-          position: absolute;
-          bottom: 2rem;
         }
       }
 
@@ -130,13 +130,69 @@ main {
           justify-content: space-between;
 
           button[type="submit"] {
-            right: 4rem;
-            bottom: 1rem;
+            margin: 2rem 1rem;
           }
 
           .oops-btn {
-            bottom: 1rem;
-            left: 4rem;
+            margin-left: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  body {
+    padding-bottom: 0;
+  }
+
+  main {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .call-to-action-section {
+    height: 100vh;
+    width: 50%;
+  }
+
+  .form-section {
+    height: 100vh;
+    width: 50%;
+    display: grid;
+    place-items: center;
+
+    .form-section__info {
+      width: 80%;
+    }
+  }
+
+  .form-section {
+    .form-section__info {
+      form {
+        .btn-wrap {
+          flex-direction: column-reverse;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 1400px) {
+  .form-section {
+    .form-section__info {
+      form {
+        .btn-wrap {
+          flex-direction: row;
+          justify-content: space-between;
+
+          button[type="submit"] {
+            margin-right: 1rem;
+          }
+
+          .oops-btn {
+            margin-left: 1rem;
           }
         }
       }

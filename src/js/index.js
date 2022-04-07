@@ -1,6 +1,8 @@
 import { asyncFunctions } from "./asyncFunctions";
 import { localStorageFunctions } from "./localStorageFunctions";
 import { getSteps } from "./formStepsHtml";
+import gsap from "gsap";
+import { progressBarChange } from "./gsapAnimations";
 
 let formSteps = "";
 
@@ -12,6 +14,7 @@ getSteps()
   .catch((err) => alert(err.message + " couldn't load steps"));
 
 const form = document.forms[0];
+const btnWrap = document.querySelector(".btn-wrap");
 let currentStep = 0;
 const questionCount = document.querySelector(".question-count");
 //we're going to change what's inside this container
@@ -27,6 +30,7 @@ function updateForm() {
   function update() {
     formElemWrap.innerHTML = formSteps[currentStep];
     questionCount.textContent = `${currentStep + 1}/5`;
+    progressBarChange(20 * currentStep);
     if (
       formSteps[currentStep].includes("Error") ||
       formSteps[currentStep].includes("Empty")
@@ -47,6 +51,7 @@ function updateForm() {
       update();
       break;
     case 3:
+      progressBarChange(20 * currentStep);
       document.querySelector("button[type='submit']").textContent =
         "I confirm the details are accurate";
       let btn = document.createElement("button");
@@ -77,7 +82,7 @@ function updateForm() {
         update();
         document.querySelector("button[type='submit']").textContent = "Next";
       });
-      form.append(btn);
+      btnWrap.append(btn);
       questionCount.textContent = `${currentStep + 1}/5`;
       currentStep++;
 

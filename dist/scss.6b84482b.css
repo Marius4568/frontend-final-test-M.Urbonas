@@ -67,14 +67,32 @@ main {
   margin-top: 4rem;
 }
 .form-section .form-section__info form {
-  padding: 3rem 3rem;
+  padding: 3rem 3rem 10rem;
   max-width: 40rem;
   margin: 0 auto;
   height: 10rem;
-  border: 1px solid black;
   position: relative;
 }
-.form-section .form-section__info form button[type=submit] {
+.form-section .form-section__info form .question-count {
+  position: absolute;
+  left: 4rem;
+  top: 1.5rem;
+}
+.form-section .form-section__info form .progress-bar {
+  position: absolute;
+  top: 2rem;
+  left: 6rem;
+  height: 0.1rem;
+  width: 0%;
+  background-color: hsl(111deg, 52%, 28%);
+}
+.form-section .form-section__info form .btn-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.form-section .form-section__info form .btn-wrap button[type=submit] {
   background-color: hsl(234deg, 65%, 55%);
   color: hsl(0deg, 0%, 100%);
   padding: 0.8rem 1.3rem;
@@ -83,24 +101,60 @@ main {
   cursor: pointer;
   transition: background-color 0.5s;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 6.5rem;
 }
-.form-section .form-section__info form button[type=submit]:hover {
+.form-section .form-section__info form .btn-wrap button[type=submit]:hover {
   transition: background-color 0.5s;
   background-color: #4e5cda;
 }
+.form-section .form-section__info form .btn-wrap .oops-btn {
+  background-color: hsl(0deg, 0%, 91%);
+  color: hsl(0deg, 0%, 47%);
+  padding: 0.8rem 1.3rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.5s;
+  position: absolute;
+  bottom: 2rem;
+}
+.form-section .form-section__info form .btn-wrap .oops-btn:hover {
+  transition: background-color 0.5s;
+  background-color: #d9d9d9;
+}
 .form-section .form-section__info form .form-elements-wrap {
   height: 100%;
+  width: 100%;
 }
+.form-section .form-section__info form .form-elements-wrap fieldset {
+  width: 90%;
+  margin: 0 auto;
+}
+
 @media screen and (min-width: 400px) {
   body {
     font-size: 0.875rem;
   }
 }
-@media screen and (min-width: 700px) {
+@media only screen and (min-width: 700px) {
   body {
     font-size: 1rem;
+  }
+
+  .form-section .form-section__info form {
+    padding: 3rem 3rem 6rem;
+  }
+  .form-section .form-section__info form .btn-wrap {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .form-section .form-section__info form .btn-wrap button[type=submit] {
+    right: 4rem;
+    bottom: 1rem;
+  }
+  .form-section .form-section__info form .btn-wrap .oops-btn {
+    bottom: 1rem;
+    left: 4rem;
   }
 }
 

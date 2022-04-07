@@ -63,7 +63,7 @@ ${activityCheckboxes}
       });
       //build up step 2 in the form
       countrySelect = `<select id="country" name="country">
-    <option selected disabled hidden value="1">Your Country:</option>
+    <option selected disabled hidden value="1" data-id ="1">Your Country:</option>
     ${countryOptions}
     </select>`;
 

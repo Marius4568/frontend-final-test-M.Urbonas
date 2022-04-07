@@ -56,24 +56,53 @@ main {
     margin-top: 4rem;
 
     form {
-      padding: 3rem 3rem;
+      padding: 3rem 3rem 10rem;
       max-width: 40rem;
       margin: 0 auto;
       height: 10rem;
-      border: 1px solid black;
       position: relative;
 
-      button[type="submit"] {
-        @include button($light-blue, $white);
+      .question-count {
         position: absolute;
-        bottom: 0;
-        right: 0;
+        left: 4rem;
+        top: 1.5rem;
+      }
+
+      .progress-bar {
+        position: absolute;
+        top: 2rem;
+        left: 6rem;
+        height: 0.1rem;
+        width: 0%;
+        background-color: $green;
+      }
+
+      .btn-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        button[type="submit"] {
+          @include button($light-blue, $white);
+          position: absolute;
+          bottom: 6.5rem;
+        }
+
+        .oops-btn {
+          @include button($light-gray, $dark-gray);
+          position: absolute;
+          bottom: 2rem;
+        }
       }
 
       .form-elements-wrap {
         height: 100%;
+        width: 100%;
 
         fieldset {
+          width: 90%;
+          margin: 0 auto;
         }
       }
     }
@@ -86,8 +115,31 @@ main {
   }
 }
 
-@media screen and (min-width: 700px) {
+@media only screen and (min-width: 700px) {
   body {
     font-size: toRem(16);
+  }
+
+  .form-section {
+    .form-section__info {
+      form {
+        padding: 3rem 3rem 6rem;
+
+        .btn-wrap {
+          flex-direction: row;
+          justify-content: space-between;
+
+          button[type="submit"] {
+            right: 4rem;
+            bottom: 1rem;
+          }
+
+          .oops-btn {
+            bottom: 1rem;
+            left: 4rem;
+          }
+        }
+      }
+    }
   }
 }

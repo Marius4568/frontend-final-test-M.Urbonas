@@ -183,7 +183,7 @@ const dashboardAsyncFunctions = {
 
       return array;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
   updateUncapitalizedNames: async function updateUncapitalizedNames() {
@@ -212,7 +212,7 @@ const dashboardAsyncFunctions = {
       const data = await asyncFunctions.getData("http://18.193.250.181:1337/api/people?&pagination[pageSize]=10&populate=country");
       signups.textContent = data.meta.pagination.total;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
   fillSelectCountryElem: async function fillSelectCountryElem(selectElem) {
@@ -220,7 +220,7 @@ const dashboardAsyncFunctions = {
     const countries = await asyncFunctions.getData("http://18.193.250.181:1337/api/countries");
 
     if (countries.error) {
-      alert("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
+      console.log("Error ".concat(countries.error.status, ": ").concat(countries.error.message, ". Couldn't load countries"));
     } else if (countries.data.length < 1) {
       alert("Empty array, no country data found.");
     } else {
@@ -282,7 +282,7 @@ async function displayPeople(url) {
       peopleInfo.innerHTML += "\n    <div class=\"person-field\">\n    <div class=\"initialsContactInfo\">\n      <div class=\"initials\">".concat(el.attributes.first_name[0] + el.attributes.last_name[0], "</div>\n      <div class=\"contact-info\">\n        <p>").concat(el.attributes.first_name + " " + el.attributes.last_name, "</p>\n        <span>").concat(el.attributes.email, "</span>\n      </div>\n    </div>\n    <div class=\"country\">").concat(el.attributes.country.data ? el.attributes.country.data.attributes.country : "No Country", "</div>\n  </div>");
     });
   } catch (err) {
-    alert(err.message);
+    console.log(err.message);
   }
 } //Functions that help to get search inputs and formulate search query/////////////////////////
 
@@ -337,7 +337,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64422" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49804" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

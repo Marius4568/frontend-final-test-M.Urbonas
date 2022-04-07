@@ -1,5 +1,6 @@
 :root {
   font-size: 16px;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -8,7 +9,6 @@ body {
 
 body {
   font-size: 0.75rem;
-  padding-bottom: 5rem;
   max-width: 100rem;
   margin: auto;
 }
@@ -158,10 +158,6 @@ main {
   }
 }
 @media only screen and (min-width: 1000px) {
-  body {
-    padding-bottom: 0;
-  }
-
   main {
     display: flex;
     flex-direction: row;

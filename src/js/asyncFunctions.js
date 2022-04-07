@@ -65,7 +65,7 @@ export const dashboardAsyncFunctions = {
       }
       return array;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
 
@@ -106,7 +106,7 @@ export const dashboardAsyncFunctions = {
       );
       signups.textContent = data.meta.pagination.total;
     } catch (err) {
-      alert(err.message);
+      console.log(err.message);
     }
   },
 
@@ -117,7 +117,7 @@ export const dashboardAsyncFunctions = {
     );
 
     if (countries.error) {
-      alert(
+      console.log(
         `Error ${countries.error.status}: ${countries.error.message}. Couldn't load countries`
       );
     } else if (countries.data.length < 1) {

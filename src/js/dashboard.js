@@ -63,7 +63,7 @@ async function displayPeople(url) {
   </div>`;
     });
   } catch (err) {
-    alert(err.message);
+    console.log(err.message);
   }
 }
 

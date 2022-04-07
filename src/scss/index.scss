@@ -4,7 +4,6 @@
 
 body {
   font-size: toRem(12);
-  padding-bottom: 5rem;
   max-width: toRem(1600);
   margin: auto;
 }
@@ -143,10 +142,6 @@ main {
 }
 
 @media only screen and (min-width: 1000px) {
-  body {
-    padding-bottom: 0;
-  }
-
   main {
     display: flex;
     flex-direction: row;
